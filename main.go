@@ -23,7 +23,7 @@ func main() {
 		fmt.Printf("[SYS] Update Followers Snippet... \n")
 		monitor(conf)
 
-		nextUpdate := time.Now().Add(defaultMonitorPeriod)
+		nextUpdate := time.Now().Add(time.Duration(conf.updateInterval) * time.Minute)
 		fmt.Printf("[SYS] Next Update scheduled at [%s]\n", nextUpdate)
 		for nextUpdate.Sub(time.Now()).Seconds() > 0 {
 			done := updateUsers(conf)
@@ -40,6 +40,7 @@ func initialize() config {
 	var username string
 	var userID string
 	var serverPort string
+	var updateInterval int
 
 	db, err := bolt.Open(defaultDBName, 0600, nil)
 	if err != nil {
@@ -60,9 +61,11 @@ func initialize() config {
 				return err
 			}
 			clientID = defaultClientID
+			updateInterval = defaultUpdateInterval
 		} else {
 			clientID = string(b.Get([]byte("clientID")))
 			oauth = string(b.Get([]byte("oauth")))
+			updateInterval, _ = strconv.Atoi(string(b.Get([]byte("updateInterval"))))
 		}
 		return nil
 	})
@@ -154,6 +157,27 @@ func initialize() config {
 		}
 	}
 
+	// Ask user whether to use saved OAuth or new OAuth
+	fmt.Printf("Simply Enter to use update interval [%d] minutes or Enter your update interval: ", updateInterval)
+	scanner.Scan()
+	inputUpdateInterval := scanner.Text()
+
+	// Update clientID if there is userinput
+	if len(inputUpdateInterval) > 0 {
+		updateInterval, err = strconv.Atoi(inputUpdateInterval)
+		if err != nil {
+			log.Fatal("Please enter a valid number for update interval")
+		}
+		db.Update(func(tx *bolt.Tx) error {
+			b := tx.Bucket([]byte("config"))
+			err = b.Put([]byte("updateInterval"), []byte(inputUpdateInterval))
+			if err != nil {
+				return err
+			}
+			return nil
+		})
+	}
+
 	// Try to get serverPort
 	db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("config"))
@@ -225,7 +249,7 @@ func initialize() config {
 		return nil
 	})
 
-	return config{clientID, oauth, username, userID, serverPort}
+	return config{clientID, oauth, username, userID, serverPort, updateInterval}
 }
 
 func monitor(c config) {

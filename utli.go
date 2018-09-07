@@ -36,11 +36,12 @@ type Unfollower struct {
 }
 
 type config struct {
-	clientID   string
-	oauth      string
-	username   string
-	userID     string
-	serverPort string
+	clientID       string
+	oauth          string
+	username       string
+	userID         string
+	serverPort     string
+	updateInterval int
 }
 
 type apiResult struct {
