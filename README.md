@@ -6,7 +6,7 @@ A prototype twitch unfollow tracker utlizing the latest twitch API and developed
 
 _Please Noted: The GIF may not reflect the latest build. And the followers update interval in the demo GIF is 1 minute for demonstration purpose and I also have fast-forwarded the GIF. The default update interval is 60 minutes._
 
-## [只看得懂中文? Only read Chinese?](https://github.com/StinkingBanana/tut/wiki/Chinese-%E4%B8%AD%E6%96%87%E8%AA%AA%E6%98%8E)
+## [中文說明](https://github.com/StinkingBanana/tut/wiki/Chinese-%E4%B8%AD%E6%96%87%E8%AA%AA%E6%98%8E)
 
 # Installation
 ## Install via go command:
