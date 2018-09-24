@@ -17,14 +17,14 @@ func main() {
 	conf := initialize()
 	go backendServer(conf.serverPort)
 
-	fmt.Printf("[SYS] Starting... \n")
+	fmt.Printf("[SYS] v%s Starting... \n", version)
 	fmt.Printf("[SYS] Using %+v \n", conf)
 	for {
-		fmt.Printf("[SYS] Update Followers Snippet... \n")
+		// fmt.Printf("[SYS] Update Followers Snippet... \n")
 		monitor(conf)
 
 		nextUpdate := time.Now().Add(time.Duration(conf.updateInterval) * time.Minute)
-		fmt.Printf("[SYS] Next Update scheduled at [%s]\n", nextUpdate)
+		// fmt.Printf("[SYS] Next Update scheduled at [%s]\n", nextUpdate)
 		for nextUpdate.Sub(time.Now()).Seconds() > 0 {
 			done := updateUsers(conf)
 			if done {
@@ -139,7 +139,7 @@ func initialize() config {
 				result, err := getUserIDFromTwitch(username, clientID, oauth)
 				if result.statusCode != 200 && result.limitRemaining == 0 {
 					waitTime := time.Unix(result.limtResetTime, 0).Sub(time.Now())
-					fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
+					// fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
 					time.Sleep(waitTime)
 					// fmt.Println("[SYS] API Limit Reset Done...")
 					goto getUserID
@@ -284,7 +284,7 @@ func monitor(c config) {
 
 		if result.statusCode != 200 && result.limitRemaining == 0 {
 			waitTime := time.Unix(result.limtResetTime, 0).Sub(time.Now())
-			fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
+			// fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
 			time.Sleep(waitTime)
 			// fmt.Println("[SYS] API Limit Reset Done...")
 			continue
@@ -331,7 +331,7 @@ func monitor(c config) {
 						result, _ := getUserNameFromTwitch(follower.uid, c.clientID, c.oauth)
 						if result.statusCode != 200 && result.limitRemaining == 0 {
 							waitTime := time.Unix(result.limtResetTime, 0).Sub(time.Now())
-							fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
+							// fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
 							time.Sleep(waitTime)
 							// fmt.Println("[SYS] API Limit Reset Done...")
 							goto getUserNameInRefollow
@@ -341,6 +341,8 @@ func monitor(c config) {
 					}
 
 					fmt.Printf("[INFO][RE-FOLLOW] %s (%s) [%s] Followed: %s\n", displayname, login, follower.uid, follower.followedAt)
+				} else {
+					fmt.Printf("[INFO][FOLLOW] UID: %s Followed: %s\n", follower.uid, follower.followedAt)
 				}
 				toAdd = append(toAdd, follower)
 			}
@@ -372,9 +374,9 @@ func monitor(c config) {
 		result, _ := getUserFromTwitch(k, c.clientID, c.oauth)
 		if result.statusCode != 200 && result.limitRemaining == 0 {
 			waitTime := time.Unix(result.limtResetTime, 0).Sub(time.Now())
-			fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
+			// fmt.Printf("[SYS] Waiting for API Limit Reset (%s)...\n", waitTime)
 			time.Sleep(waitTime)
-			fmt.Println("[SYS] API Limit Reset Done...")
+			// fmt.Println("[SYS] API Limit Reset Done...")
 			goto getUserNameInUnfollow
 		}
 
@@ -440,17 +442,17 @@ func updateUsers(c config) bool {
 				}
 			}
 		}
-		followerCount := 0
-		userCount := 0
-		f.ForEach(func(_, _ []byte) error {
-			followerCount++
-			return nil
-		})
-		u.ForEach(func(_, _ []byte) error {
-			userCount++
-			return nil
-		})
-		fmt.Printf("[SYS][%s] Checked / Updated some users info...[%d/%d]\n", time.Now().Local(), userCount, followerCount)
+		// followerCount := 0
+		// userCount := 0
+		// f.ForEach(func(_, _ []byte) error {
+		// 	followerCount++
+		// 	return nil
+		// })
+		// u.ForEach(func(_, _ []byte) error {
+		// 	userCount++
+		// 	return nil
+		// })
+		// fmt.Printf("[SYS][%s] Checked / Updated some users info...[%d/%d]\n", time.Now().Local(), userCount, followerCount)
 		return nil
 	})
 	db.Close()

@@ -30,7 +30,13 @@ func GetRoot(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`
 	<p>Welcome to Twitch Unfollow Tracker</p>
 	<p>Available Endpoints:</p>
-	<ul><li>/followers</li><li>/refollowers</li><li>/followersID</li><li>/unfollowers</li><li>/user/{id}</li></ul>
+	<ul>
+	<li><a href="/followers">/followers</a></li>
+	<li><a href="/refollowers">/refollowers</a></li>
+	<li><a href="/followersID">/followersID</a></li>
+	<li><a href="/unfollowers">/unfollowers</a></li>
+	<li>/user/{id}</li>
+	</ul>
 	`))
 }
 
