@@ -20,7 +20,7 @@ func backendServer(port string) {
 	router.HandleFunc("/followersID", GetFollowersID).Methods("GET")
 	router.HandleFunc("/unfollowers", GetUnfollowers).Methods("GET")
 	router.HandleFunc("/user/{id}", GetUser).Methods("GET")
-	fmt.Printf("[SYS] Server listening at [http://localhost:%s]\n", port)
+	fmt.Printf("[SYS] Server listening at http://localhost:%s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 

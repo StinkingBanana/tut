@@ -14,10 +14,11 @@ import (
 )
 
 func main() {
+	fmt.Printf("[SYS] Welcome to TUT, Twitch Unfollow Tacker, v%s\n", version)
 	conf := initialize()
 	go backendServer(conf.serverPort)
 
-	fmt.Printf("[SYS] v%s Starting... \n", version)
+	fmt.Printf("[SYS] Starting... \n")
 	fmt.Printf("[SYS] Using %+v \n", conf)
 	for {
 		// fmt.Printf("[SYS] Update Followers Snippet... \n")
