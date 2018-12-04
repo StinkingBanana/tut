@@ -195,7 +195,12 @@ func getFollowersFromTwitch(userID string, pagination string, clientID string, o
 		if err != nil {
 			log.Fatal(err)
 		}
-		nextPagination := parsed.Path("pagination.cursor").Data().(string)
+
+		nextPagination := ""
+		if parsed.Path("pagination.cursor").Data() != nil {
+			nextPagination = parsed.Path("pagination.cursor").Data().(string)
+		}
+
 		if len(followers) > 0 {
 			for _, child := range followers {
 				childdata, _ := child.ChildrenMap()
