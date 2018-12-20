@@ -381,9 +381,16 @@ func monitor(c config) {
 			goto getUserNameInUnfollow
 		}
 
-		parsed, _ := gabs.ParseJSON([]byte(result.response["user"]))
-		userdata, _ := parsed.ChildrenMap()
-		fmt.Printf("[INFO][UNFOLLOW] %s (%s) [%s], Followed: %s\n", userdata["display_name"].Data().(string), userdata["login"].Data().(string), k, v)
+		parsed, err := gabs.ParseJSON([]byte(result.response["user"]))
+		if err != nil {
+			fmt.Printf("[INFO][UNFOLLOW / ID Not exist] [%s], Followed: %s\n", k, v)
+		} else {
+			userdata, err := parsed.ChildrenMap()
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Printf("[INFO][UNFOLLOW] %s (%s) [%s], Followed: %s\n", userdata["display_name"].Data().(string), userdata["login"].Data().(string), k, v)
+		}
 
 		db, err = bolt.Open(defaultDBName, 0600, nil)
 		if err != nil {
