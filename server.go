@@ -185,17 +185,25 @@ func GetUnfollowers(w http.ResponseWriter, r *http.Request) {
 		f.ForEach(func(k, v []byte) error {
 			u := tx.Bucket([]byte("users"))
 			user := u.Get(k)
-
-			parsed, _ := gabs.ParseJSON(user)
-			userdata, _ := parsed.ChildrenMap()
-			uf := Unfollower{
-				userdata["id"].Data().(string),
-				userdata["login"].Data().(string),
-				userdata["display_name"].Data().(string),
-				userdata["profile_image_url"].Data().(string),
-				string(v)}
-
-			unfollowers = append(unfollowers, uf)
+			parsed, err := gabs.ParseJSON(user)
+			if err != nil {
+				uf := Unfollower{
+					string(k),
+					"Unknown",
+					"Unknown",
+					"Unknown",
+					string(v)}
+				unfollowers = append(unfollowers, uf)
+			} else {
+				userdata, _ := parsed.ChildrenMap()
+				uf := Unfollower{
+					userdata["id"].Data().(string),
+					userdata["login"].Data().(string),
+					userdata["display_name"].Data().(string),
+					userdata["profile_image_url"].Data().(string),
+					string(v)}
+				unfollowers = append(unfollowers, uf)
+			}
 			return nil
 		})
 		return nil
