@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"sort"
 	"strconv"
 
 	"github.com/Jeffail/gabs"
@@ -139,6 +140,10 @@ func GetFollowers(w http.ResponseWriter, r *http.Request) {
 		return nil
 	})
 
+	sort.Slice(outputUsers, func(i, j int) bool {
+		return outputUsers[i].FollowedAt > outputUsers[j].FollowedAt
+	})
+
 	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(outputUsers)
 }
@@ -208,6 +213,11 @@ func GetUnfollowers(w http.ResponseWriter, r *http.Request) {
 		})
 		return nil
 	})
+
+	sort.Slice(unfollowers, func(i, j int) bool {
+		return unfollowers[i].UnfollowedAt > unfollowers[j].UnfollowedAt
+	})
+
 	w.WriteHeader(200)
 	json.NewEncoder(w).Encode(unfollowers)
 }
