@@ -79,8 +79,8 @@ func getUserIDFromTwitch(username string, clientID string, oauth string) (apiRes
 
 		exists := parsed.ExistsP("data.id")
 		if exists {
-			userdata, _ := parsed.Path("data").Children()
-			firstuserdata, _ := userdata[0].ChildrenMap()
+			userdata := parsed.Path("data").Children()
+			firstuserdata := userdata[0].ChildrenMap()
 			return apiResult{resp.StatusCode,
 				map[string]string{"id": firstuserdata["id"].Data().(string)},
 				limit, limitRemain, limitReset}, nil
@@ -117,8 +117,8 @@ func getUserNameFromTwitch(userID string, clientID string, oauth string) (apiRes
 
 		exists := parsed.ExistsP("data.login")
 		if exists {
-			userdata, _ := parsed.Path("data").Children()
-			firstuserdata, _ := userdata[0].ChildrenMap()
+			userdata := parsed.Path("data").Children()
+			firstuserdata := userdata[0].ChildrenMap()
 			return apiResult{resp.StatusCode,
 				map[string]string{"login": firstuserdata["login"].Data().(string), "displayname": firstuserdata["display_name"].Data().(string)},
 				limit, limitRemain, limitReset}, nil
@@ -155,7 +155,7 @@ func getUserFromTwitch(userID string, clientID string, oauth string) (apiResult,
 
 		exists := parsed.ExistsP("data.login")
 		if exists {
-			userdata, _ := parsed.Path("data").Children()
+			userdata := parsed.Path("data").Children()
 			return apiResult{resp.StatusCode,
 				map[string]string{"user": userdata[0].String()},
 				limit, limitRemain, limitReset}, nil
@@ -191,10 +191,7 @@ func getFollowersFromTwitch(userID string, pagination string, clientID string, o
 		}
 
 		var output []follower
-		followers, err := parsed.Path("data").Children()
-		if err != nil {
-			log.Fatal(err)
-		}
+		followers := parsed.Path("data").Children()
 
 		nextPagination := ""
 		if parsed.Path("pagination.cursor").Data() != nil {
@@ -203,7 +200,7 @@ func getFollowersFromTwitch(userID string, pagination string, clientID string, o
 
 		if len(followers) > 0 {
 			for _, child := range followers {
-				childdata, _ := child.ChildrenMap()
+				childdata := child.ChildrenMap()
 				uid, _ := childdata["from_id"].Data().(string)
 				followAt := childdata["followed_at"].Data().(string)
 				output = append(output, follower{uid, followAt})
