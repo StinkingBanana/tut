@@ -79,7 +79,7 @@ func getUserIDFromTwitch(username string, clientID string, oauth string) (apiRes
 
 		exists := parsed.ExistsP("data.id")
 		if exists {
-			userdata := parsed.Path("data").Children()
+			userdata, _ := parsed.Path("data").Children()
 			firstuserdata := userdata[0].ChildrenMap()
 			return apiResult{resp.StatusCode,
 				map[string]string{"id": firstuserdata["id"].Data().(string)},
@@ -117,7 +117,7 @@ func getUserNameFromTwitch(userID string, clientID string, oauth string) (apiRes
 
 		exists := parsed.ExistsP("data.login")
 		if exists {
-			userdata := parsed.Path("data").Children()
+			userdata, _ := parsed.Path("data").Children()
 			firstuserdata := userdata[0].ChildrenMap()
 			return apiResult{resp.StatusCode,
 				map[string]string{"login": firstuserdata["login"].Data().(string), "displayname": firstuserdata["display_name"].Data().(string)},
@@ -155,7 +155,7 @@ func getUserFromTwitch(userID string, clientID string, oauth string) (apiResult,
 
 		exists := parsed.ExistsP("data.login")
 		if exists {
-			userdata := parsed.Path("data").Children()
+			userdata, _ := parsed.Path("data").Children()
 			return apiResult{resp.StatusCode,
 				map[string]string{"user": userdata[0].String()},
 				limit, limitRemain, limitReset}, nil
@@ -191,7 +191,7 @@ func getFollowersFromTwitch(userID string, pagination string, clientID string, o
 		}
 
 		var output []follower
-		followers := parsed.Path("data").Children()
+		followers, _ := parsed.Path("data").Children()
 
 		nextPagination := ""
 		if parsed.Path("pagination.cursor").Data() != nil {

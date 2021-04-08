@@ -65,7 +65,7 @@ func GetReFollowers(w http.ResponseWriter, r *http.Request) {
 				udata := u.Get(k)
 				if udata != nil && len(udata) > 0 {
 					parsed, _ := gabs.ParseJSON(udata)
-					jsondata := parsed.ChildrenMap()
+					jsondata, _ := parsed.ChildrenMap()
 					out := User{
 						string(k),
 						jsondata["login"].Data().(string),
@@ -115,7 +115,7 @@ func GetFollowers(w http.ResponseWriter, r *http.Request) {
 				ufdata := uf.Get(k)
 				if udata != nil && len(udata) > 0 {
 					parsed, _ := gabs.ParseJSON(udata)
-					jsondata := parsed.ChildrenMap()
+					jsondata, _ := parsed.ChildrenMap()
 					out := User{
 						string(k),
 						jsondata["login"].Data().(string),
@@ -200,7 +200,7 @@ func GetUnfollowers(w http.ResponseWriter, r *http.Request) {
 					string(v)}
 				unfollowers = append(unfollowers, uf)
 			} else {
-				userdata := parsed.ChildrenMap()
+				userdata, _ := parsed.ChildrenMap()
 				uf := Unfollower{
 					userdata["id"].Data().(string),
 					userdata["login"].Data().(string),
@@ -244,7 +244,7 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 
 	if user != nil {
 		parsed, _ := gabs.ParseJSON(user)
-		userdata := parsed.ChildrenMap()
+		userdata, _ := parsed.ChildrenMap()
 		uf := Unfollower{
 			userdata["id"].Data().(string),
 			userdata["login"].Data().(string),

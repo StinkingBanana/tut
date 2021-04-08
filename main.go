@@ -318,7 +318,7 @@ func monitor(c config) {
 						userdata := u.Get([]byte(follower.uid))
 						if userdata != nil {
 							parsed, _ := gabs.ParseJSON([]byte(userdata))
-							user := parsed.ChildrenMap()
+							user, _ := parsed.ChildrenMap()
 							displayname, _ = user["display_name"].Data().(string)
 							login, _ = user["login"].Data().(string)
 						}
@@ -385,7 +385,7 @@ func monitor(c config) {
 		if err != nil {
 			fmt.Printf("[INFO][UNFOLLOW / ID Not exist] [%s], Followed: %s\n", k, v)
 		} else {
-			userdata := parsed.ChildrenMap()
+			userdata, _ := parsed.ChildrenMap()
 			if err != nil {
 				log.Fatal(err)
 			}
