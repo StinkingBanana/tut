@@ -48,9 +48,9 @@ $ go run .
    ```
 
    - Replace {ClientID} with your ClientID and enter in your browser.
-   - Authorzie it.
+   - Authorize it.
    - If nothing goes wrong, you should get an empty white page with URL similar to http://localhost/#access_token={AccessToken}&...
-   - Extract that {AccessToken} and paste into our tut program
+   - Extract that {AccessToken} and that's what we need for this step.
    - Note: the access token will expire after sometime. If the access token no longer works, generate a new one using the same method.
 
 4. Enter twitch username to track. (Your input will be remembered.)
