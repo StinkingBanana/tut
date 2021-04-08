@@ -90,8 +90,8 @@ func initialize() config {
 		clientID = inputClinetID
 	}
 
-	// Ask user whether to use saved OAuth or new OAuth
-	fmt.Printf("Simply Enter to use OAuth token [%s] or Enter your OAuth token [Optional]: ", oauth)
+	// Ask user whether to use saved AccessToken or new AccessToken
+	fmt.Printf("Simply Enter to use Access token [%s] or Enter your New Access token [Optional]: ", oauth)
 	scanner.Scan()
 	inputOAuth := scanner.Text()
 
